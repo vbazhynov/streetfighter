@@ -11,3 +11,14 @@
 .fighter-preview___left {
   align-items: flex-start;
 }
+
+.fighter-preview___info {
+  width: 70%;
+  padding-left: 0px;
+  list-style: none;
+  font-size: 25px;
+  color: black;
+  background: #ffdfa7;
+  border: 5px solid #ca9650;
+  text-align: center;
+}
