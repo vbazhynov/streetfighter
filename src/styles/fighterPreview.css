@@ -22,3 +22,8 @@
   border: 5px solid #ca9650;
   text-align: center;
 }
+
+.fighter-preview___img {
+  height: 300px;
+  width: auto;
+}
