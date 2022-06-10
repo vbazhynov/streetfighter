@@ -56,19 +56,19 @@ function keyDownHandler(ev) {
         console.log('You Cannot Attack, you`re in block');
       } else {
         if (keysPressed.has(PlayerTwoBlock)) {
-          playerTwo.health -= getDamage(playerOne, playerTwo);
-          console.log('Attack partly blocked');
+          console.log('Attack blocked by Player two');
         } else {
-          playerTwo.health -= getHitPower(playerOne);
-          console.log('FullAttack');
+          const pl1Hit = getDamage(playerOne, playerTwo);
+          playerTwo.health -= pl1Hit;
+          console.log(`Player One Hit ${pl1Hit} points`);
         }
         if (playerTwo.health <= 0) {
           playerTwo.health = 0;
           isWinner = true;
+          console.log('Player One Wins!');
           winner = playerOne;
         }
         isPlayerOneAttack = true;
-        console.log('playerTwo Health :' + playerTwo.health);
         updateHealthBar('right', playerTwo);
         break;
       }
@@ -82,19 +82,19 @@ function keyDownHandler(ev) {
         break;
       } else {
         if (keysPressed.has(PlayerOneBlock)) {
-          playerOne.health -= getDamage(playerTwo, playerOne);
-          console.log('Attack partly blocked');
+          console.log('Attack blocked by player One');
         } else {
-          playerOne.health -= getHitPower(playerTwo);
-          console.log('Full Attack');
+          const p2Hit = getDamage(playerTwo, playerOne);
+          playerOne.health -= p2Hit;
+          console.log(`Player Two Hit ${p2Hit} points`);
         }
         isPlayerTwoAttack = true;
         if (playerOne.health <= 0) {
           playerOne.health = 0;
           isWinner = true;
+          console.log('Player Two Wins!');
           winner = playerTwo;
         }
-        console.log('playerOne Health :' + playerOne.health);
         updateHealthBar('left', playerOne);
         break;
       }
@@ -102,6 +102,7 @@ function keyDownHandler(ev) {
 }
 
 function countPercents(base, current) {
+  /* Count percents for Health Bar */
   return (current * 100) / base;
 }
 
@@ -123,13 +124,14 @@ function checkForCritical(keys, playerOne, playerTwo) {
       if (isPlayerOneCrit) {
         console.log('You Can`t Crit Now, cooldown is not finished');
       } else {
-        console.log('Player One Critical Hit : ' + playerOne.attack * 2);
+        console.log('Player One Critical Hit : ' + playerOne.attack * 2 + 'points');
         isPlayerOneCrit = true;
         playerTwo.health -= playerOne.attack * 2;
         if (playerTwo.health <= 0) {
           playerTwo.health = 0;
           isWinner = true;
           winner = playerOne;
+          console.log('Player One Wins!');
         }
         updateHealthBar('right', playerTwo);
         setTimeout(() => {
@@ -148,13 +150,14 @@ function checkForCritical(keys, playerOne, playerTwo) {
       if (isPlayerTwoCrit) {
         console.log('You Can`t Crit Now, cooldown is not finished');
       } else {
-        console.log('Player Two Critical Hit : ' + playerTwo.attack * 2);
+        console.log('Player Two Critical Hit : ' + playerTwo.attack * 2 + 'points');
         isPlayerTwoCrit = true;
         playerOne.health -= playerTwo.attack * 2;
         if (playerOne.health <= 0) {
           playerOne.health = 0;
           isWinner = true;
           winner = playerTwo;
+          console.log('Player Two Wins!');
         }
         updateHealthBar('left', playerOne);
         setTimeout(() => {
@@ -169,17 +172,14 @@ function checkForCritical(keys, playerOne, playerTwo) {
 export function getDamage(attacker, defender) {
   // return damage
   const damage = getHitPower(attacker) - getBlockPower(defender);
-  //console.log('Damage trow block is :' + damage);
   return damage >= 0 ? damage : 0;
 }
 
 export function getHitPower(fighter) {
   // return hit power
-
   const { attack } = fighter;
   const criticalHitChance = Math.random() * (2 - 1) + 1;
   const power = attack * criticalHitChance;
-  //console.log('Damage is :' + power);
   return power;
 }
 
@@ -188,6 +188,5 @@ export function getBlockPower(fighter) {
   const { defense } = fighter;
   const criticalHitChance = Math.random() * (2 - 1) + 1;
   const power = defense * criticalHitChance;
-  console.log('Defence :' + power);
   return power;
 }
