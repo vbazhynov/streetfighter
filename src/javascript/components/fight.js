@@ -4,22 +4,14 @@ import { fighterDetailsMap } from './fighterSelector.js';
 let keysPressed = new Set();
 let isPlayerOneAttack = false;
 let isPlayerTwoAttack = false;
-let isWinner = false;
-let winner = '';
 let isPlayerOneCrit = false;
 let isPlayerTwoCrit = false;
 export function fight(firstFighter, secondFighter) {
-  document.addEventListener('keydown', keyDownHandler);
-  document.addEventListener('keyup', keyUpHandler);
-
   return new Promise((resolve) => {
-    // resolve the promise with the winner when fight is over
-    let timerId = setInterval(() => {
-      if (isWinner) {
-        clearInterval(timerId);
-        resolve(winner);
-      }
-    }, 500);
+    keyDownHandler = keyDownHandler.bind(null, firstFighter, secondFighter, resolve);
+
+    document.addEventListener('keydown', keyDownHandler);
+    document.addEventListener('keyup', keyUpHandler);
   });
 }
 
@@ -37,9 +29,8 @@ function keyUpHandler(ev) {
   }
 }
 
-function keyDownHandler(ev) {
-  const playerOne = fighterDetailsMap.get('playerOne');
-  const playerTwo = fighterDetailsMap.get('playerTwo');
+function keyDownHandler(playerOne, playerTwo, resolve, ev) {
+  console.log(ev);
   const { code } = ev;
   keysPressed.add(code);
   const { PlayerOneAttack, PlayerTwoAttack, PlayerOneBlock, PlayerTwoBlock } = controls;
@@ -64,9 +55,7 @@ function keyDownHandler(ev) {
         }
         if (playerTwo.health <= 0) {
           playerTwo.health = 0;
-          isWinner = true;
-          console.log('Player One Wins!');
-          winner = playerOne;
+          resolve(playerOne);
         }
         isPlayerOneAttack = true;
         updateHealthBar('right', playerTwo);
@@ -91,9 +80,7 @@ function keyDownHandler(ev) {
         isPlayerTwoAttack = true;
         if (playerOne.health <= 0) {
           playerOne.health = 0;
-          isWinner = true;
-          console.log('Player Two Wins!');
-          winner = playerTwo;
+          resolve(playerTwo);
         }
         updateHealthBar('left', playerOne);
         break;
