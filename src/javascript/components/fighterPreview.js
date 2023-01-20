@@ -22,8 +22,6 @@ export function createFighterPreview(fighter, position) {
   fighterInfo.append(createLiTag('Defense', defense));
   fighterElement.append(fighterInfo);
 
-  // todo: show fighter info (image, name, health, etc.)
-
   return fighterElement;
 }
 

@@ -2,7 +2,6 @@ import { showModal } from './modal';
 import { createElement } from '../../helpers/domHelper';
 
 export function showWinnerModal(fighter) {
-  // call showModal function
   const winnerObj = {};
   winnerObj.title = `Winner is ${fighter.name}`;
   winnerObj.bodyElement = createElement({
@@ -11,8 +10,6 @@ export function showWinnerModal(fighter) {
     attributes: { src: fighter.source }
   });
   winnerObj.onClose = () => {
-    // const loadingElement = document.getElementById('loading-overlay');
-    // loadingElement.style.visibility = 'visible';
     location.reload();
   };
   showModal(winnerObj);
